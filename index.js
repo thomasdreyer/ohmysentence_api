@@ -1,10 +1,9 @@
-
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-
+import dotenv from 'dotenv'
+dotenv.config()
+import express from 'express';
+import cors from 'cors';
+import { connect, Schema, model } from 'mongoose';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3001;
@@ -12,21 +11,21 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+connect(process.env.MONGODB_URL);
 
 
-const wordSchema = new mongoose.Schema({
+const wordSchema = new Schema({
     word: String,
     type: String
   });
   
-  const Word = mongoose.model('Word', wordSchema);
+  const Word = model('Word', wordSchema);
 
-  const sentenceSchema = new mongoose.Schema({
+  const sentenceSchema = new Schema({
     sentence: String
   });
   
-  const Sentence = mongoose.model('Sentence', sentenceSchema);
+  const Sentence = model('Sentence', sentenceSchema);
 
 // Application routes :
 // GET /api/word-list/:type
@@ -67,3 +66,5 @@ const wordSchema = new mongoose.Schema({
 app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });
+
+export default app;
