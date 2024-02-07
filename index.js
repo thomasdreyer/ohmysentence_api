@@ -13,6 +13,11 @@ app.use(bodyParser.json());
 
 connect(process.env.MONGODB_URL);
 
+const wordTypesSchema = new Schema({
+wordTypes:Array
+});
+
+const WordTypes = model('WordTypes', wordTypesSchema)
 
 const wordSchema = new Schema({
     word: String,
@@ -28,11 +33,19 @@ const wordSchema = new Schema({
   const Sentence = model('Sentence', sentenceSchema);
 
 // Application routes :
+// GET /api/word-types
+app.get('/api/word-types', (req,res)=>{
+WordTypes.find({})
+.then(wordTypes => res.json(wordTypes))
+.catch(err => res.status(404).json({ error: err.message }));
+})
+
+
 // GET /api/word-list/:type
   app.get('/api/word-list/:type', (req, res) => {
     const { type } = req.params;
     Word.find({ type })
-      .then(words => res.json({ words }))
+      .then(words => res.json(words))
       .catch(err => res.status(404).json({ error: err.message }));
   });
 
